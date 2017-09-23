@@ -141,7 +141,7 @@ int main() {
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Green line
 
-          for(int i=0; i<30;i=i+3){
+          for(size_t i=0; i<30;i=i+3){
             mpc_x_vals.push_back(vars[2+i]);
             mpc_y_vals.push_back(vars[2+30+i]);
           }
@@ -155,7 +155,7 @@ int main() {
 
           //.. add (x,y) points to list here, points are in reference to the vehicle's coordinate system
           // the points in the simulator are connected by a Yellow line
-          for(int i=0; i<30;i=i+3){
+          for(size_t i=0; i<30;i=i+3){
             next_x_vals.push_back(i);
             next_y_vals.push_back(polyeval(coeffs,i));
           }
