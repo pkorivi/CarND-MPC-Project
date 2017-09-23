@@ -84,6 +84,7 @@ int main() {
         auto j = json::parse(s);
         string event = j[0].get<string>();
         if (event == "telemetry") {
+          auto start = std::chrono::high_resolution_clock::now();
           // j[1] is the data JSON object
           vector<double> ptsx = j[1]["ptsx"];
           vector<double> ptsy = j[1]["ptsy"];
@@ -163,7 +164,9 @@ int main() {
           msgJson["next_x"] = next_x_vals;
           msgJson["next_y"] = next_y_vals;
 
-
+          auto elapsed = std::chrono::high_resolution_clock::now() - start;
+          long long microseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();
+          cout<<":: time ::"<<microseconds<<endl;
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
           std::cout << msg << std::endl;
           // Latency

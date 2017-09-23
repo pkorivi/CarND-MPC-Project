@@ -35,7 +35,7 @@ size_t a_start = delta_start + N - 1;
 
 
 //TODO modify
-double ref_v = 40;
+double ref_v = 60;
 
 class FG_eval {
  public:
@@ -67,6 +67,11 @@ class FG_eval {
       //here multiplying with a number adds weight to this error and it reduces the fluctuations in this values
       fg[0] += 500*CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
       fg[0] += CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
+    }
+    //chnage in angle vs the velocity - maybe chnage to psi and velocity
+    for(size_t t=0;t<N-1;t++){
+      fg[0] += CppAD::pow(vars[delta_start + t]*vars[v_start + t], 2);
+      fg[0] += CppAD::pow(vars[epsi_start + t]*vars[v_start + t], 2);
     }
 
     //
