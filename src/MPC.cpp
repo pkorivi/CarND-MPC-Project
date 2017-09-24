@@ -35,7 +35,7 @@ size_t a_start = delta_start + N - 1;
 
 
 //TODO modify
-double ref_v = 80;
+double ref_v = 70;
 
 class FG_eval {
  public:
@@ -53,8 +53,8 @@ class FG_eval {
     //Calculate cost
     fg[0] = 0;
     for(size_t t=0;t<N;t++){
-      fg[0] += 50*CppAD::pow(vars[cte_start + t], 2); // cost to maintain trajectory with low error
-      fg[0] += CppAD::pow(vars[epsi_start + t], 2); // cost to maintain orientation
+      fg[0] += 900*CppAD::pow(vars[cte_start + t], 2); // cost to maintain trajectory with low error
+      fg[0] += 125*CppAD::pow(vars[epsi_start + t], 2); // cost to maintain orientation
       fg[0] += CppAD::pow(vars[v_start + t] - ref_v, 2); //cost for maintaining velocity
     }
     //cost based on actuators- Minimize the use
@@ -69,11 +69,9 @@ class FG_eval {
       fg[0] += CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
     }
     //chnage in angle vs the velocity - maybe chnage to psi and velocity
-    cout<<" delta :: ";
     for(size_t t=0;t<N-1;t++){
-      fg[0] += 75*CppAD::pow(vars[delta_start + t]*vars[v_start + t], 2);
-      cout<<" "<<vars[delta_start+t];
-      fg[0] += CppAD::pow(vars[epsi_start + t]*vars[v_start + t], 2);
+      fg[0] += 150*CppAD::pow(vars[delta_start + t]*vars[v_start + t], 2);
+      fg[0] += 10*CppAD::pow(vars[epsi_start + t]*vars[v_start + t], 2);
     }
 
     //
@@ -269,7 +267,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // {...} is shorthand for creating a vector, so auto x1 = {1.0,2.0}
   // creates a 2 element double vector.
   //return {};
-  std::vector<double> ret = {solution.x[delta_start],solution.x[a_start]};
+  std::vector<double> ret = {solution.x[delta_start+5],solution.x[a_start+5]};
   for (size_t i = 0; i < N; i++) {
     ret.push_back(solution.x[x_start + 1 +i]);
   }
