@@ -13,7 +13,7 @@
 using json = nlohmann::json;
 
 // For converting back and forth between radians and degrees.
-constexpr double pi() { return M_PI; }
+constexpr double pi() { return M_PI; } 
 double deg2rad(double x) { return x * pi() / 180; }
 double rad2deg(double x) { return x * 180 / pi(); }
 
@@ -96,10 +96,8 @@ int main() {
           double c_throttle = j[1]["throttle"];
 
           /*
-          * TODO: Calculate steering angle and throttle using MPC.
-          *
+          * Calculate steering angle and throttle using MPC.
           * Both are in between [-1, 1].
-          *
           */
 
           double steer_value;
@@ -119,7 +117,6 @@ int main() {
           auto coeffs = polyfit(t_ptsx, t_ptsy,3);
           //polynomial - c3x³+c2x²+c1x+c0;
           //evaluate the error at origin.
-          //TODO check the sign - +ve or negative
           double cte = coeffs[0];
           double epsi = -atan(coeffs[1]);
 
