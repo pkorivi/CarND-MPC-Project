@@ -20,10 +20,10 @@ My project includes the following files:
 * src/main.cpp implements the main function to trigger the solver and send back actuator values to server
 * src/MPC.cpp implements implements the solver and required dependencies.
 
-#### 2. Model: The model used in the project is same as the one described in the classroom. The update equations for different
-parameters are as follows. 
+#### 2. Model: The model used in the project is same as the one described in the classroom. 
+The update equations for different parameters are as follows. 
 
-![alt text](https://github.com/pkorivi/CarND-MPC-Project/car_model.png "Car Model")
+![alt text](https://github.com/pkorivi/CarND-MPC-Project/blob/master/car_model.png)
 
 State is comprised of the current position, orientation,velocity, cross track error, psi, currents teering angle and throttle values.
 
