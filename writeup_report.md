@@ -27,15 +27,14 @@ The update equations for different parameters are as follows.
 
 State is comprised of the current position, orientation,velocity, cross track error, psi, currents teering angle and throttle values.
 
-The project uses N = 30 and dt = 0.02. This choice has been taken after various tries (30:0.05, 10:0.05, 10:0.1, 30:0.01 and so on). 
-I have observed that the smaller N is better for computational speed but I started achieving better results with N = 30 so I used the same. 
-I would prefer a shorter N to make computation faster in further usage. Most of the values performed OK with car moving out from track in few regions. 
+The project uses N = 10 and dt = 0.1. This choice has been taken after various tries (30:0.02, 30:0.05, 10:0.05, 10:0.1, 30:0.01 and so on). 
+Initially 30:0.02 performed well but after adding the latency constraint, I started getting weird behavior in the predicted path, I turned to smaller N and larger dt as per suggestion. It improved performance and stability.
 
 The waypoints are transformed into car's frame of reference as the waypoint display takes data in car frame and also the fitting curves are good with transformed points.
 
 
-To battle latency and drive car smoothly, various techniques have been tried. Out of all I chose using the actuator values with 100ms delay from solver. It gave good results,
-but I would have preferred a solution which is mentioned in the lecture about considering the start state after a simulated time or limiting the acceleration and steering bundaries for initial 100ms. 
+To battle latency and drive car smoothly, various techniques have been tried. Out of all I chose using the actuator values with 100ms delay from solver. It gave good results, but I would have preferred a solution which is mentioned in the lecture about considering the start state after a simulated time or limiting the acceleration and steering bundaries for initial 100ms. 
+
 These ideas didn't give me a good performance. I would like to try these further while improving the computational and driving speed. 
 
 The final [video](./result.mp4).
