@@ -6,8 +6,9 @@
 using CppAD::AD;
 
 // TODO: Set the timestep length and duration
-size_t N = 30;
-double dt = 0.02;
+size_t N = 10;
+double dt = 0.1;
+size_t latency_cnt = 1;
 
 // This value assumes the model presented in the classroom is used.
 //
@@ -33,6 +34,9 @@ size_t epsi_start = cte_start + N;
 size_t delta_start = epsi_start + N;
 size_t a_start = delta_start + N - 1;
 
+
+double previous_throttle=0;
+double previous_steering=0;
 
 //TODO modify
 double ref_v = 70;
@@ -189,14 +193,22 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // The upper and lower limits of delta are set to -25 and 25
   // degrees (values in radians).
   // NOTE: Feel free to change this to something else.
-  for (size_t i = delta_start; i < a_start; i++) {
+  for (size_t i = delta_start; i < delta_start+latency_cnt; i++) {
+    vars_lowerbound[i] = previous_steering;
+    vars_upperbound[i] = previous_steering;
+  }
+  for (size_t i = delta_start+latency_cnt; i < a_start; i++) {
     vars_lowerbound[i] = -0.436332;
     vars_upperbound[i] = 0.436332;
   }
 
   // Acceleration/decceleration upper and lower limits.
   // NOTE: Feel free to change this to something else.
-  for (size_t i = a_start; i < n_vars; i++) {
+  for (size_t i = a_start; i < a_start+latency_cnt; i++) {
+    vars_lowerbound[i] = previous_throttle;
+    vars_upperbound[i] = previous_throttle;
+  }
+  for (size_t i = a_start+latency_cnt; i < n_vars; i++) {
     vars_lowerbound[i] = -1.0;
     vars_upperbound[i] = 1.0;
   }
@@ -267,13 +279,15 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
   // {...} is shorthand for creating a vector, so auto x1 = {1.0,2.0}
   // creates a 2 element double vector.
   //return {};
-  std::vector<double> ret = {solution.x[delta_start+5],solution.x[a_start+5]};
+  previous_steering = solution.x[delta_start+latency_cnt];
+  previous_throttle = solution.x[a_start+latency_cnt];
+  std::vector<double> ret = {solution.x[delta_start+latency_cnt],solution.x[a_start+latency_cnt]};
   for (size_t i = 0; i < N; i++) {
     ret.push_back(solution.x[x_start + 1 +i]);
-  }
-  for (size_t i = 0; i < N; i++) {
     ret.push_back(solution.x[y_start + 1 +i]);
   }
+  //for (size_t i = 0; i < N; i++) {
+  //}
   //ret.insert(ret.end(),(solution.x.begin() + x_start + 1),(solution.x.begin() + x_start + 1 + N));
   //ret.insert(ret.end(),(solution.x.begin() + y_start + 1),(solution.x.begin() + y_start + 1 + N));
   //return {solution.x[delta_start],solution.x[a_start]};
